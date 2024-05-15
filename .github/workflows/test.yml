@@ -1,0 +1,33 @@
+on:
+  pull_request:
+
+permissions:
+  pull-requests: write
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
+            const { data: comments } = await github.rest.issues.listComments({ owner, repo, issue_number });
+            const existingComment = comments.find(comment => comment.user.login === "github-actions[bot]" && comment.body.includes("Benchmark result: foobar"))
+
+            const { execSync } = require("child_process");
+            const result = 'hello';
+            const body = `
+              Benchmark result: foobar)
+              \`\`\`
+              ${result}
+              \`\`\`
+            `;
+
+            if (existingComment) {
+              github.rest.issues.updateComment({ owner, repo, body, comment_id: existingComment.id });
+            } else {
+              github.rest.issues.createComment({ owner, repo, body, issue_number });
+            }
