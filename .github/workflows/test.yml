@@ -18,7 +18,7 @@ jobs:
             const existingComment = comments.find(comment => comment.user.login === "github-actions[bot]" && comment.body.includes("Benchmark result: foobar"))
 
             const { execSync } = require("child_process");
-            const result = 'hello';
+            const result = new Date().toString();
             const body = `
               Benchmark result: foobar)
               \`\`\`
