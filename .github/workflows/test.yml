@@ -20,7 +20,7 @@ jobs:
             const { execSync } = require("child_process");
             const result = new Date().toString();
             const body = `
-              Benchmark result: foobar)
+              Benchmark result: foobar
               \`\`\`
               ${result}
               \`\`\`
